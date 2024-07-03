@@ -8,7 +8,10 @@ use model\Trait\TraitSlugify;
 use DateTime;
 use Exception;
 
-class ArticlesMapping extends AbstractMapping
+// mapping venant d'autres tables
+use model\Mapping\UserMapping;
+
+class ArticleMapping extends AbstractMapping
 {
 
     use TraitDateTime;
@@ -22,6 +25,61 @@ class ArticlesMapping extends AbstractMapping
     protected null|string|DateTime $article_date_update=null;
     protected null|string|DateTime $article_date_publish=null;
     protected ?int $user_user_id=null;
+
+    // liens avec les tables pour jointure
+    protected ?UserMapping $user = null; // simple relation Many2One UserMapping
+    protected ?array $categories = null; // relation M2M, le tableau peut contenir des instances de CategoryMapping
+
+    protected ?array $comments = null; // relation One2Many, le tableau peut contenir des instances de CommentMapping
+
+    // pour le nombre de commentaire(s)
+    protected int $nb_comments=0;
+
+    public function getNbComments(): int
+    {
+        return $this->nb_comments;
+    }
+
+    public function setNbComments(int $nb_comments): void
+    {
+        $this->nb_comments = $nb_comments;
+    }
+
+
+
+    public function getComments(): ?array
+    {
+        return $this->comments;
+    }
+
+    public function setComments(?array $comments): void
+    {
+        $this->comments = $comments;
+    }
+
+
+
+    public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(?array $categories): void
+    {
+        $this->categories = $categories;
+    }
+
+
+    public function getUser(): ?UserMapping
+    {
+        return $this->user;
+    }
+
+    public function setUser(?UserMapping $user): void
+    {
+        $this->user = $user;
+    }
+
 
 
     public function getArticleId(): ?int
